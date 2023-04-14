@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dev-web
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: dev-web
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dev-web
+spec:
+  selector:
+    matchLabels:
+      app: dev-web
+  serviceName: dev-web
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dev-web
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+          name: dev-web
